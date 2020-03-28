@@ -3,9 +3,14 @@
 # To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/.
 
 # Dummy Dockerfile because hooks aren't working with a custom Filename
-# This file will be displayed on your https://hub.docker.com site
 # Have a look into the hooks folder to see them per arch
-# https://gitlab.com/ros2cuisine/templates/docker-autobuild/tree/master/hooks/
+# https://github.com/ichbestimmtnicht/docker-autobuild-release/tree/master/hooks/
+
+# Set global environment variables
+ARG SRC_HUB
+ARG SRC_NAME
+ARG SRC_REPO
+ARG SRC_TAG
 
 FROM scratch as buildcontext
 

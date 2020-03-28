@@ -115,7 +115,7 @@ if test -f "Dockerfile"; then
     echo "# Dummy Dockerfile because hooks aren't working with a custom Filename"
     echo "# This file will be displayed on your https://hub.docker.com site"
     echo "# Have a look into the hooks folder to see them per arch"
-    echo "# https://gitlab.com/ros2cuisine/templates/docker-autobuild/tree/master/hooks/"
+    echo "# https://github.com/ichbestimmtnicht/docker-autobuild-release/tree/master/hooks/"
     echo ""
 else
     curl -sSL https://raw.githubusercontent.com/ichbestimmtnicht/docker-autobuild-release/${INITIALIZE_TAG}/template/Dockerfile > Dockerfile

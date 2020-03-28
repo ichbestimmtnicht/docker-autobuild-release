@@ -8,12 +8,16 @@
 # SOURCE_BRANCH: the name of the branch or the tag that is currently being tested.
 # SOURCE_COMMIT: the SHA1 hash of the commit being tested.
 # COMMIT_MSG: the message from the commit being tested and built.
-# DOCKER_REPO: "test" the name of the Docker repository being built.
-# DOCKERFILE_PATH: the dockerfile currently being built.
+# DOCKER_REPO: the name of the Docker repository being built.
+# DOCKERFILE_PATH: the dockerfile currently being built. 
+# As you can not change the Dockerfile for a custom build (using the hooks folder)
+# this variable is pointless to use.
 # DOCKER_TAG: the Docker repository tag being built.
 # IMAGE_NAME: the name and tag of the Docker repository being built. 
 # (IMAGE_NAME is a combination of DOCKER_REPO:DOCKER_TAG)
 
+# Reminder:
+# You can not use hyphens (-) in bash variables
 
 #--------------------------------------------------------------
 # Decisions
@@ -50,6 +54,8 @@ DEST_HUB="index.docker.io"
 # use as many as you like
 # BUILD_ARG_
 BUILD_ARGS=true # Set to false to disable build-arg's
+BUILD_ARG_SRC_HUB="index.docker.io"
+BUILD_ARG_SRC_NAME="${SR_DEST_BUILD_ARCH}" # Corresponding to the current arch in a loop
 BUILD_ARG_SRC_REPO="alpine"
 BUILD_ARG_SRC_TAG="latest"
 
@@ -59,7 +65,7 @@ BUILD_ARG_SRC_TAG="latest"
 # LABEL_BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 # LABEL_VCS_REF="$(git rev-parse --short HEAD)"
 LABEL_DESCRIPTION="Description not provided"
-LABEL_VCS_URL="https://github.com/"
+LABEL_VCS__URL="https://github.com/YOUR_NAME/YOUR_REPO"
 LABEL_DOCKER_CMD="docker pull ${IMAGE_NAME}"
 LABEL_MAINTAINER="${DEST_USER}"
 LABEL_NAME="${IMAGE_NAME}"

@@ -7,6 +7,12 @@
 # Have a look into the hooks folder to see them per arch
 # https://gitlab.com/ros2cuisine/templates/docker-autobuild/tree/master/hooks/
 
+# Set global environment variables
+ARG SRC_HUB
+ARG SRC_NAME
+ARG SRC_REPO
+ARG SRC_TAG
+
 FROM scratch AS buildcontext
 
 COPY . .
