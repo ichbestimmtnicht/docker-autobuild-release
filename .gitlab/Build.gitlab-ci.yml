@@ -1,0 +1,23 @@
+build:
+  stage: build
+  image: ubuntu
+  variables:
+    SOURCE_BRANCH: dev
+    SOURCE_COMMIT: test
+    COMMIT_MSG: test
+    DOCKER_REPO: index.docker.io/ichbestimmtnicht/docker-autobuild
+    DOCKERFILE_PATH: /
+    DOCKER_TAG: dev
+    IMAGE_NAME: $DOCKER_REPO/$DOCKER_TAG
+
+  script:
+    - bash -c "apt-get update && apt-get install docker.io -y"
+    - bash service docker start
+    - bash hooks/post_checkout
+    - bash hooks/pre_build
+    - bash hooks/build
+    - bash hooks/push
+
+  only:
+    refs:
+      - dev

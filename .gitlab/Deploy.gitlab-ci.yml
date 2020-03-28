@@ -1,0 +1,34 @@
+# Slow but savest updates
+deploy_production:
+  stage: deploy
+  image: alpine
+  script:
+     #- .gitlab/deploy.sh --production
+     - echo "Placeholder"
+  only:
+    refs:
+      - production
+
+# Adding a patch
+deploy_patch:
+  stage: deploy
+  image: alpine
+  script:
+    #- .gitlab/deploy.sh --patch
+     - echo "Placeholder"
+  only:
+    refs:
+      - dev
+
+# Deploying latest working development
+deploy_dev:
+  stage: deploy
+  image: alpine
+  script:
+    #- .gitlab/deploy.sh --dev
+    - echo "Placeholder"
+  only:
+    refs:
+      - dev
+      - dev-ichbestimmtnicht
+

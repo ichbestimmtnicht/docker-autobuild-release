@@ -1,0 +1,12 @@
+# Test the image
+test:
+  stage: test
+  image: alpine
+  script:
+    #- .gitlab/test.sh
+    - echo "Placeholder"
+  except:
+    refs:
+      - master
+    variables:
+      - $TEST_DISABLED

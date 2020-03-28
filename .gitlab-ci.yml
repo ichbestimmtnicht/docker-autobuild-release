@@ -1,0 +1,27 @@
+image: docker
+
+variables:
+  DB_USER: cuisine
+  GITLAB_BASE_URL: "https://gitlab.com"
+  APP_PROJECT_ID: 16010407
+
+stages:
+  - prepare
+  - build
+  - test
+#  - review
+#  - staging
+  - deploy
+  - trigger
+  - cleanup
+
+include:
+  - local: .gitlab/Build.gitlab-ci.yml
+  - local: .gitlab/Test.gitlab-ci.yml
+  #- local: .gitlab/Code-Quality.gitlab-ci.yml
+  - local: .gitlab/Deploy.gitlab-ci.yml
+  - local: .gitlab/Trigger.gitlab-ci.yml
+  #- local: .gitlab/Performance-Testing.gitlab-ci.yml
+  #- local: .gitlab/Container-Scanning.gitlab-ci.yml
+  #- local: .gitlab/Dependency-Scanning.gitlab-ci.yml
+  #- local: .gitlab/License-Management.gitlab-ci.yml
