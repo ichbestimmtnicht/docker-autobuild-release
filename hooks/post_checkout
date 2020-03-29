@@ -24,7 +24,7 @@ QEMU_USER_STATIC_LATEST_TAG=$(curl -s https://api.github.com/repos/multiarch/qem
 echo "image: ${DEST_HUB}/${DEST_USER}/${DEST_REPO}:${DEST_TAG}" > auto-docker-manifest.yaml
 echo "manifests:" >> auto-docker-manifest.yaml
 
-# Cycle trough the the arches
+# Cycle through the the arches
 for SR_DEST_BUILD_ARCH in ${DEST_ARCHES}
 do
     echo "SCRIPT_INFO: Begin Cycle ${SR_DEST_BUILD_ARCH}"
