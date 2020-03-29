@@ -45,12 +45,12 @@
 - use ```bash initialize.sh -tag=master``` to get always the bleeding edge version downloaded at buildtime. Use with caution: BREAKING CHANGES MAY HAPPEN!
 
 - ```hooks/env.sh``` is where your variables are set. Change the file to your liking (It is well documented) \
-Please do not forget to set ssh-keys and similiar values within your dockerhub env and only reference them like ```BUILD_ARG_SSH_KEY="${SSH_KEY}"``` within the env.sh file!
+Please do not forget to set ssh-keys and similiar values only within your dockerhub env and only reference them like ```BUILD_ARG_SSH_KEY="${SSH_KEY}"``` within the ```hooks/env.sh``` file!
 
 - Have a look at the different Dockerfile templates (within the hooks folder) and copy/paste/adapt the content of your Dockerfile into them. \
 PLANNED Or you could use a [combined Dockerfile](https://gitlab.com/ros2cuisine/templates/docker-autobuild/wiki/Combined.md)
 
-- If you already had a dockerfile in your project root it dit not got overwritten. This is the file that will be displayed at the hub.docker.com website. \
+- If you already had a dockerfile in your project root it did not got overwritten. This is the file that will be displayed at the hub.docker.com website. \
 [Example from this repo](https://hub.docker.com/r/ichbestimmtnicht/docker-autobuild/dockerfile) \
 I recommend to add a header like this in case you don't use a combined Dockerfile:
 
@@ -77,14 +77,17 @@ I recommend to add a header like this in case you don't use a combined Dockerfil
 
 - No Experimental Features (like ```--platform``` to tag those none amd64 images correct from the start)
 
+- if the build process for an arch doesn't finish the last working build will get referenced (See To do point 3)
+
 ## To do
 
 - coding the option to use a single dockerfile for all arches
 - add moore arches
-- adding option to let the build fail if one of the images is not building correctly
+- adding option to let the build fail if one of the images is not building correctly (the base tag will get updated and references to the last working image in this case)
 - enable experimental docker build features for hub.docker.com
-- CI/CD integrations: jenkins;circleci;gitlab
+- CI/CD integrations: jenkins; circleci; gitlab
 - Test the abillity to build windows containers
+- Combine filedownloads in ```hooks/initialize.sh``` into a single loop with the help of an array
 
 ## Contribution
 

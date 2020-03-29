@@ -56,7 +56,7 @@ else
 fi
 
 if test -f "hooks/post_checkout"; then
-    echo "INFO: File already present -> skipping download"
+    echo "INFO: File hooks/post_checkout already present -> skipping download"
 else
     curl -sSL https://raw.githubusercontent.com/ichbestimmtnicht/docker-autobuild-release/${INITIALIZE_TAG}/${DOWNLOAD_FOLDER}/post_checkout > hooks/post_checkout
     echo "INFO: hooks/post_checkout downloaded"
@@ -113,7 +113,6 @@ if test -f "Dockerfile"; then
     echo "      Example Dockerfile header:"
     echo ""
     echo "# Dummy Dockerfile because hooks aren't working with a custom Filename"
-    echo "# This file will be displayed on your https://hub.docker.com site"
     echo "# Have a look into the hooks folder to see them per arch"
     echo "# https://github.com/ichbestimmtnicht/docker-autobuild-release/tree/master/hooks/"
     echo ""
