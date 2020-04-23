@@ -55,7 +55,8 @@ DEST_HUB="index.docker.io"
 # BUILD_ARG_
 BUILD_ARGS=true # Set to false to disable build-arg's
 BUILD_ARG_SRC_HUB="index.docker.io"
-BUILD_ARG_SRC_NAME="${SR_DEST_BUILD_ARCH}" # Corresponding to the current arch in a loop works great when pulling from the docker library
+BUILD_ARG_SRC_NAME="${SR_DEST_BUILD_ARCH}" # NOT WORKING - placeholder for library(official) images
+# When building from library dockerimages set the arch in the corresponding dockerfile for now
 BUILD_ARG_SRC_REPO="alpine"
 BUILD_ARG_SRC_TAG="latest"
 
@@ -84,22 +85,15 @@ BUILD_CGROUPS=false # Set to "true" to enable cgroups
 
 #--------------------------------------------------------------
 # Experimental Features
-# DO NOT DELETE OR CHANGE
+# DO NOT DELETE
+# OR CHANGE UNLESS YOU KNOW WHAT YOU ARE DOING
 # If you are running your own docker build server 
 # and have experimental features enabled
 # you could use squash. (combine layers)
 # But make sure you do NOT download the scripts at buildtime
-# from the master branch. Use a stable release tag
-# or copy the hole script because the corresponding part
-# may change in the future
+# from the master branch.
 # NOT TESTED
 BUILD_SQUASH=false
- 
-# current implementation doesn't make sense
-# DO NOT CHANGE
-# NOT TESTED
-BUILD_PLATFORM=false
-
 
 #--------------------------------------------------------------
 # Placeholder for upcoming features
@@ -117,3 +111,8 @@ DEST_OS="linux"
 # for windows builds
 # possible values=default process or hyperv
 BUILD_ISOLATION=false
+
+# current implementation doesn't make sense
+# DO NOT CHANGE
+# NOT TESTED
+BUILD_PLATFORM=false

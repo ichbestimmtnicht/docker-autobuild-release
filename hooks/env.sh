@@ -58,11 +58,36 @@ LABEL_VCS_URL="https://github.com/ichbestimmtnicht/docker-autobuild-release/"
 LABEL_VENDOR="${DEST_USER}"
 LABEL_SCHEMA_VERSION="1.0.0-rc1"
 
-# Placeholder and testing variables
-# DO NOT CHANGE OR DELETE THEM
-BUILD_ARCH="amd64"
-BUILD_SINGLE_DOCKERFILE=false # PLANNED
-BUILD_SQUASH=false # Experimental Features are not enabled
-BUILD_PLATFORM=false # Experimental features are not enabled
+#--------------------------------------------------------------
+# Experimental Features
+# DO NOT DELETE
+# OR CHANGE UNLESS YOU KNOW WHAT YOU ARE DOING
+# If you are running your own docker build server 
+# and have experimental features enabled
+# you could use squash. (combine layers)
+# But make sure you do NOT download the scripts at buildtime
+# from the master branch.
+# NOT TESTED
+BUILD_SQUASH=false
 
+#--------------------------------------------------------------
+# Placeholder for upcoming features
+# DO NOT CHANGE OR DELETE
+
+# self-explanatory - feature will be added in the near future
+BUILD_SINGLE_DOCKERFILE=false
+
+# We may add support for different host build arches
+# that you could use your raspberry pi or something like that as your buildserver
+BUILD_ARCH="amd64"
+
+# we may support MS-Windows Container in the future
 DEST_OS="linux"
+# for windows builds
+# possible values=default process or hyperv
+BUILD_ISOLATION=false
+
+# current implementation doesn't make sense
+# DO NOT CHANGE
+# NOT TESTED
+BUILD_PLATFORM=false

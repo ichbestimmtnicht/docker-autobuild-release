@@ -131,7 +131,7 @@ do
     if [ ${BUILD_QUIET} = true ]; then
         echo "    -q \\" >> ${SR_BUILD_FILE}
     else 
-        echo "SCRIPT_INFO ${SR_DEST_BUILD_ARCH}: quit not set"
+        echo "SCRIPT_INFO ${SR_DEST_BUILD_ARCH}: quiet not set"
     fi
 
     if [ ${BUILD_SQUASH} = true ]; then
