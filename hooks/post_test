@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # https://github.com/ichbestimmtnicht/docker-autobuild-release
 # Template created 2020 by Ludwig Werner Döhnert

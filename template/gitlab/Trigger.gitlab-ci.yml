@@ -1,0 +1,6 @@
+trigger:
+  stage: trigger
+  script:
+    - echo "Placeholder for your own trigger to inform your userbase about a new version for example"
+  only:
+    - master
