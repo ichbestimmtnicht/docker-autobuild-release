@@ -90,6 +90,7 @@ I recommend to add a header like this in case you don't use a combined Dockerfil
 - CI/CD integrations: jenkins; circleci
 - Test the ability to build windows containers
 - Combine filedownloads in `hooks/initialize.sh` into a single loop with the help of an array
+- create a new `tools.sh` file for recurring tasks like package manager test
 
 ## Contribution
 

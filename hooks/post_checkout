@@ -21,7 +21,7 @@ case $PKG_MANAGER in
         ;;
 esac
 
-source hooks/env.sh
+. ./hooks/env.sh
 
 # Hardcoded Variables
 LABEL_BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
@@ -161,7 +161,7 @@ do
 
     # Loops for the buildfile
     # Get all BUILD_HOST_ variables
-    if [ ${BUILD_HOSTS} == false ]; then
+    if ${BUILD_HOSTS} == "false"; then
         echo "SCRIPT_INFO ${SR_DEST_BUILD_ARCH}: no hosts"
     else
         echo "SCRIPT_INFO: Getting all BUILD_HOST_ variables set"
@@ -173,7 +173,7 @@ do
         done
     fi
 
-    if [ ${BUILD_CGROUPS} == false ]; then
+    if ${BUILD_CGROUPS} == "false"; then
         echo "SCRIPT_INFO ${SR_DEST_BUILD_ARCH}: no cgroups"
     else
         echo "SCRIPT_INFO: Getting all BUILD_CGROUP_ variables set"
@@ -185,7 +185,7 @@ do
         done
     fi
 
-    if [ ${BUILD_ARGS} == false ]; then
+    if ${BUILD_ARGS} == "false"; then
         echo "SCRIPT_INFO ${SR_DEST_BUILD_ARCH}: no build arguments"
     else
         echo "SCRIPT_INFO: Getting all BUILD_ARG_ variables set"

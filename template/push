@@ -7,6 +7,6 @@
 
 wget https://raw.githubusercontent.com/ichbestimmtnicht/docker-autobuild-release/v0.0.1/hooks/push
 
-bash push
+sh push
 
 exit 0

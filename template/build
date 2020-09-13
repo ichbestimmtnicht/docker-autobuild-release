@@ -7,6 +7,6 @@
 
 wget https://raw.githubusercontent.com/ichbestimmtnicht/docker-autobuild-release/v0.0.1/hooks/build
 
-bash build
+sh build
 
 exit 0
