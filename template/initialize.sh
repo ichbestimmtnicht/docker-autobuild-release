@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # This script will get the necessary files to get your project ready to go for multiarch docker autobuilds
 # There are no child scripts that will be executed
@@ -10,15 +10,18 @@
 
 # Local variables used when no commandline arguments are present
 INITIALIZE_TAG="false"
-LOCAL_INSTALL="false"
+LOCAL_INSTALL="true"
+INIT_GITLAB="false"
 
 # Interpret commandline arguments
 for commandline_argument in "$@"
 do
-    if [ ${commandline_argument} = "-local" ]; then
-        LOCAL_INSTALL="true"
+    if [ ${commandline_argument} = "-remote" ]; then
+        LOCAL_INSTALL="false"
     elif [ $(echo "${commandline_argument}" | cut -c -5) = "-tag=" ]; then
         INITIALIZE_TAG=${commandline_argument:5}
+    elif [ ${commandline_argument} = "-gitlab" ]; then
+        INIT_GITLAB="true"
     else
         echo "ERROR: Commandline argument \"${commandline_argument}\" unknown. Aborting."
         exit 1
@@ -41,6 +44,46 @@ if [ ${LOCAL_INSTALL} = "true" ]; then
 else
     echo "INFO: downloading scripts from the template folder"
     DOWNLOAD_FOLDER="template"
+fi
+
+# Gitlab init
+if [ ${INIT_GITLAB} = "false" ]; then
+    echo "INFO: Gitlab trigger not present -> skipping download"
+else
+    echo "INFO: Initializing Gitlab-ci scripts and templates"
+
+    echo "INFO: Starting creating .gitlab folder"
+    mkdir -p .gitlab
+
+    if test -f ".gitlab-ci.yml"; then
+        curl -sSL https://raw.githubusercontent.com/ichbestimmtnicht/docker-autobuild-release/${INITIALIZE_TAG}/template/gitlab/.gitlab-ci.yml > .gitlab-ci.yml
+    else
+        echo "INFO: .gitlab-ci.yml already present -> skipping download"
+    fi
+
+    if test -f ".gitlab/Build.gitlab-ci.yml"; then
+        curl -sSL https://raw.githubusercontent.com/ichbestimmtnicht/docker-autobuild-release/${INITIALIZE_TAG}/template/gitlab/Build.gitlab-ci.yml > .gitlab/Build.gitlab-ci.yml
+    else
+        echo "INFO: .gitlab/Build.gitlab-ci.yml already present -> skipping download"
+    fi
+
+    if test -f ".gitlab/Deploy.gitlab-ci.yml"; then
+        curl -sSL https://raw.githubusercontent.com/ichbestimmtnicht/docker-autobuild-release/${INITIALIZE_TAG}/template/gitlab/Deploy.gitlab-ci.yml > .gitlab/Deploy.gitlab-ci.yml
+    else
+        echo "INFO: .gitlab/Deploy.gitlab-ci.yml already present -> skipping download"
+    fi
+
+    if test -f ".gitlab/Test.gitlab-ci.yml"; then
+        curl -sSL https://raw.githubusercontent.com/ichbestimmtnicht/docker-autobuild-release/${INITIALIZE_TAG}/template/gitlab/Test.gitlab-ci.yml > .gitlab/Test.gitlab-ci.yml
+    else
+        echo "INFO: .gitlab/Test.gitlab-ci.yml already present -> skipping download"
+    fi
+
+    if test -f ".gitlab/Trigger.gitlab-ci.yml"; then
+        curl -sSL https://raw.githubusercontent.com/ichbestimmtnicht/docker-autobuild-release/${INITIALIZE_TAG}/template/gitlab/Trigger.gitlab-ci.yml > .gitlab/Trigger.gitlab-ci.yml
+    else
+        echo "INFO: .gitlab/Trigger.gitlab-ci.yml already present -> skipping download"
+    fi
 fi
 
 echo "INFO: Starting creating hooks folder"
@@ -74,9 +117,7 @@ if test -f "hooks/push"; then
 else
     curl -sSL https://raw.githubusercontent.com/ichbestimmtnicht/docker-autobuild-release/${INITIALIZE_TAG}/${DOWNLOAD_FOLDER}/push > hooks/push
     echo "INFO: hooks/push downloaded"
-
 fi
-
 
 # Download template files
 if test -f "hooks/env.sh"; then

@@ -1,0 +1,18 @@
+image: docker
+
+variables:
+  GITLAB_BASE_URL: "https://gitlab.com"
+
+stages:
+  - prepare
+  - build
+  - test
+  - deploy
+  - trigger
+  - cleanup
+
+include:
+  - local: .gitlab/Build.gitlab-ci.yml
+  - local: .gitlab/Test.gitlab-ci.yml
+  - local: .gitlab/Deploy.gitlab-ci.yml
+  - local: .gitlab/Trigger.gitlab-ci.yml

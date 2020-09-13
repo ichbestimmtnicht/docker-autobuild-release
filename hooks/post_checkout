@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # https://github.com/ichbestimmtnicht/docker-autobuild-release
 # Template created 2020 by Ludwig Werner Döhnert
@@ -6,7 +6,20 @@
 # To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/.
 
 # Install req
-apt-get update && apt-get install wget curl git -y -q
+# Attention: yum is not tested
+PKG_MANAGER_PATH=$( command -v yum || command -v apt-get || command -v apk ) || echo "Neither yum, apt-get nor apk found"
+PKG_MANAGER=$(basename $PKG_MANAGER_PATH)
+case $PKG_MANAGER in
+    apt-get)
+        $PKG_MANAGER update && apt install -y -q curl git
+        ;;
+    apk)
+        $PKG_MANAGER add --no-cache git curl
+        ;;
+    yum)
+        $PKG_MANAGER install -y git curl
+        ;;
+esac
 
 source hooks/env.sh
 
@@ -28,7 +41,7 @@ echo "manifests:" >> auto-docker-manifest.yaml
 for SR_DEST_BUILD_ARCH in ${DEST_ARCHES}
 do
     echo "SCRIPT_INFO: Begin Cycle ${SR_DEST_BUILD_ARCH}"
-    
+
     # Set buildfile name and head
     SR_BUILD_FILE="${SR_DEST_BUILD_ARCH}.build.sh"
     SR_BUILD_TAG="${DEST_HUB}/${DEST_USER}/${DEST_REPO}:${DEST_TAG}-${SR_DEST_BUILD_ARCH}"
@@ -41,9 +54,9 @@ do
         echo "    platform:" >> auto-docker-manifest.yaml
         echo "      architecture: ${SR_DEST_ARCH}" >> auto-docker-manifest.yaml
         echo "      os: ${DEST_OS}" >> auto-docker-manifest.yaml
-        
+
         echo "echo \"Building ${SR_DEST_BUILD_ARCH}\"" >> ${SR_BUILD_FILE}
-        echo "docker build \\" >> ${SR_BUILD_FILE}
+        echo "docker build --pull \\" >> ${SR_BUILD_FILE}
         echo "    --tag ${SR_BUILD_TAG} \\" >> ${SR_BUILD_FILE}
 
     elif [ ${SR_DEST_BUILD_ARCH} = "arm32v7" ]; then
@@ -56,9 +69,9 @@ do
         echo "      architecture: ${SR_DEST_ARCH}" >> auto-docker-manifest.yaml
         echo "      os: ${DEST_OS}" >> auto-docker-manifest.yaml
         echo "      variant: v7" >> auto-docker-manifest.yaml
-        
+
         echo "echo \"Building ${SR_DEST_BUILD_ARCH}\"" >> ${SR_BUILD_FILE}
-        echo "docker build \\" >> ${SR_BUILD_FILE}
+        echo "docker build --pull \\" >> ${SR_BUILD_FILE}
         echo "    --tag ${SR_BUILD_TAG} \\" >> ${SR_BUILD_FILE}
 
     elif [ ${SR_DEST_BUILD_ARCH} = "arm64v8" ]; then
@@ -71,12 +84,11 @@ do
         echo "      architecture: ${SR_DEST_ARCH}" >> auto-docker-manifest.yaml
         echo "      os: ${DEST_OS}" >> auto-docker-manifest.yaml
         echo "      variant: v8" >> auto-docker-manifest.yaml
-        
-        echo "echo \"Building ${SR_DEST_BUILD_ARCH}\"" >> ${SR_BUILD_FILE}
-        echo "docker build \\" >> ${SR_BUILD_FILE}
-        echo "    --tag ${SR_BUILD_TAG} \\" >> ${SR_BUILD_FILE}
 
-    else 
+        echo "echo \"Building ${SR_DEST_BUILD_ARCH}\"" >> ${SR_BUILD_FILE}
+        echo "docker build --pull \\" >> ${SR_BUILD_FILE}
+        echo "    --tag ${SR_BUILD_TAG} \\" >> ${SR_BUILD_FILE}
+    else
         echo "SCRIPT_ERROR: $SR_DEST_BUILD_ARCH not referenced"
         exit 1
     fi
@@ -92,58 +104,58 @@ do
 
     if [ ${BUILD_COMPRESS} = true ]; then
         echo "    --compress \\" >> ${SR_BUILD_FILE}
-    else 
+    else
         echo "SCRIPT_INFO ${SR_DEST_BUILD_ARCH}: Not compressing"
     fi
 
     if [ ${BUILD_PULL} = true ]; then
         echo "    --pull \\" >> ${SR_BUILD_FILE}
-    else 
+    else
         echo "SCRIPT_INFO ${SR_DEST_BUILD_ARCH}: Not pulling" 
     fi
 
     if [ ${BUILD_FORCE_RM} = true ]; then
         echo "    --force-rm \\" >> ${SR_BUILD_FILE}
-    else 
+    else
         echo "SCRIPT_INFO ${SR_DEST_BUILD_ARCH}: No force rm"
     fi
 
     if [ ${BUILD_ISOLATION} = true ]; then
         echo " SCRIPT_WARNING: You are using a feature that is not fully implemented yet!"
         echo "    --isolation \\" >> ${SR_BUILD_FILE}
-    else 
+    else
         echo "SCRIPT_INFO ${SR_DEST_BUILD_ARCH}: No build isolation"
     fi
 
     if [ ${BUILD_NO_CACHE} = true ]; then
         echo "    --no-cache \\" >> ${SR_BUILD_FILE}
-    else 
+    else
         echo "SCRIPT_INFO ${SR_DEST_BUILD_ARCH}: No cache"
     fi
 
     if ${BUILD_PLATFORM} = true; then
         echo "SCRIPT_WARNING: ${SR_DEST_BUILD_ARCH}: Experimental is not supported"
         echo "    --platform ${SR_DEST_ARCH} \\" >> ${SR_BUILD_FILE}
-    else 
+    else
         echo "SCRIPT_INFO ${SR_DEST_BUILD_ARCH}: platform not set"
     fi
 
     if [ ${BUILD_QUIET} = true ]; then
         echo "    -q \\" >> ${SR_BUILD_FILE}
-    else 
+    else
         echo "SCRIPT_INFO ${SR_DEST_BUILD_ARCH}: quiet not set"
     fi
 
     if [ ${BUILD_SQUASH} = true ]; then
         echo "SCRIPT_WARNING ${SR_DEST_BUILD_ARCH}: Experimental is not supported"
         echo "    --squash \\" >> ${SR_BUILD_FILE}
-    else 
+    else
         echo "SCRIPT_INFO ${SR_DEST_BUILD_ARCH}: squash not set"
     fi
 
     if [ ${BUILD_TARGET_STAGE} = false ]; then
         echo "SCRIPT_INFO ${SR_DEST_BUILD_ARCH}: no target stage selected"
-    else 
+    else
         echo "    --target ${BUILD_TARGET_STAGE} \\" >> ${SR_BUILD_FILE}
     fi
 
@@ -151,8 +163,9 @@ do
     # Get all BUILD_HOST_ variables
     if [ ${BUILD_HOSTS} == false ]; then
         echo "SCRIPT_INFO ${SR_DEST_BUILD_ARCH}: no hosts"
-    else 
-        set | awk -F "=" '{print $1}' | grep ".*BUILD_HOST_.*" | 
+    else
+        echo "SCRIPT_INFO: Getting all BUILD_HOST_ variables set"
+        set | awk -F "=" '{print $1}' | grep ".*BUILD_HOST_.*"
         while read SR_BUILDHOST; do
             SR_BUILDHOST_NAME=`echo ${SR_BUILDHOST} | sed 's/BUILD_HOST_//g'`
             echo "    --build-arg  ${SR_BUILDHOST_NAME}=\"${!SR_BUILDHOST}\" \\" >> ${SR_BUILD_FILE}
@@ -163,8 +176,8 @@ do
     if [ ${BUILD_CGROUPS} == false ]; then
         echo "SCRIPT_INFO ${SR_DEST_BUILD_ARCH}: no cgroups"
     else
-        # Get all BUILD_CGROUP_ variables
-        set | awk -F "=" '{print $1}' | grep ".*BUILD_CGROUP_.*" | 
+        echo "SCRIPT_INFO: Getting all BUILD_CGROUP_ variables set"
+        set | awk -F "=" '{print $1}' | grep ".*BUILD_CGROUP_.*"
         while read SR_BUILDCGROUP; do
             SR_BUILDCGROUP_NAME=`echo ${SR_BUILDCGROUP} | sed 's/BUILD_CGROUP_//g'`
             echo "    --build-arg  ${SR_BUILDCGROUP_NAME}=\"${!SR_BUILDCGROUP}\" \\" >> ${SR_BUILD_FILE}
@@ -175,23 +188,22 @@ do
     if [ ${BUILD_ARGS} == false ]; then
         echo "SCRIPT_INFO ${SR_DEST_BUILD_ARCH}: no build arguments"
     else
-        # Get all BUILD_ARG_ variables
-        set | awk -F "=" '{print $1}' | grep ".*BUILD_ARG_.*" | 
-        while read SR_BUILDARG; do
-            SR_BUILDARG_NAME=`echo ${SR_BUILDARG} | sed 's/BUILD_ARG_//g'`
-            echo "    --build-arg  ${SR_BUILDARG_NAME}=\"${!SR_BUILDARG}\" \\" >> ${SR_BUILD_FILE}
-            echo "SCRIPT_INFO ${SR_DEST_BUILD_ARCH}:    --build-arg  ${SR_BUILDARG_NAME}=\"${!SR_BUILDARG}\" \\"
-        done
+        echo "SCRIPT_INFO: Getting all BUILD_ARG_ variables set"
+        set | grep ".*BUILD_ARG_.*" > SR_BUILDARGS.tmp
+        while read SR_BUILD_ARG; do
+            echo "    --build-arg ${SR_BUILD_ARG:10} \\" >> ${SR_BUILD_FILE}
+            echo "SCRIPT_INFO ${SR_DEST_BUILD_ARCH}: --build-arg ${SR_BUILD_ARG:10} \\"
+        done < SR_BUILDARGS.tmp
     fi
-    
-    # Get all LABEL_ variables
-    set | awk -F "=" '{print $1}' | grep ".*LABEL_.*" | 
+
+    echo "SCRIPT_INFO: Getting all LABEL_ variables set"
+    set | grep ".*LABEL_.*" > SR_BUILDLABELS.tmp
     while read SR_BUILDLABEL; do
         # Convert __ to - for the labelname
-        SR_BUILDLABEL_NAME=`echo "${SR_BUILDLABEL}" | sed 's/LABEL_//g' | sed 's/__/-/g'`
-        echo "    --label  ${SR_BUILDLABEL_NAME}=\"${!SR_BUILDLABEL}\" \\" >> ${SR_BUILD_FILE}
-        echo "SCRIPT_INFO ${SR_DEST_BUILD_ARCH}:    --label  ${SR_BUILDLABEL_NAME}=\"${!SR_BUILDLABEL}\" \\"
-    done
+        #SR_BUILDLABEL_NAME=`echo "${SR_BUILDLABEL}" | sed 's/LABEL_//g' | sed 's/__/-/g'`
+        echo "    --label  ${SR_BUILDLABEL:6} \\" >> ${SR_BUILD_FILE}
+        echo "SCRIPT_INFO ${SR_DEST_BUILD_ARCH}: --label  ${SR_BUILDLABEL:6} \\"
+    done < SR_BUILDLABELS.tmp
 
     # Adding Buildcontext
     echo "    ." >> ${SR_BUILD_FILE}

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # https://github.com/ichbestimmtnicht/docker-autobuild-release
 # Template created 2020 by Ludwig Werner Döhnert
@@ -16,8 +16,8 @@ chmod +x manifest-tool
 echo "SCRIPT_INFO: Push the docker images per arch ${DEST_ARCHES}"
 for SR_DEST_BUILD_ARCH in ${DEST_ARCHES}
 do
-    docker push ${IMAGE_NAME}-${SR_DEST_BUILD_ARCH}
-    echo "SCRIPT INFO: ${IMAGE_NAME}-${SR_DEST_BUILD_ARCH} pushed"
+    docker push ${DEST_HUB}/${DEST_USER}/${DEST_REPO}:${DEST_TAG}-${SR_DEST_BUILD_ARCH}
+    echo "SCRIPT INFO: ${DEST_HUB}/${DEST_USER}/${DEST_REPO}:${DEST_TAG}-${SR_DEST_BUILD_ARCH} pushed"
 done
 
 # Push the manifest

@@ -11,41 +11,43 @@
 
 ## NOTE: The alpine based images created from this repo itself are just for testing purposes
 
+## tl;dr - dockerhub builds
+
+    # Within your project folder; nothing get's overwritten
+    curl -sSL https://raw.githubusercontent.com/ichbestimmtnicht/docker-autobuild-release/master/template/initialize.sh | bash
+
+Modify `hooks/env.sh`, `Dockerfile`, `hooks/amd64.Dockerfile`, `hooks/arm32v7.Dockerfile`, `hooks/arm64v8.Dockerfile` \
+Setup [Dockerhub autobuild](https://docs.docker.com/docker-hub/builds/)
+
 ## Usage
 
 - Change your console path into the root folder of your project
 
-- Copy the necessary files \
-    NOTES: You can switch from Option 1 to Option 2 for any hook individually at any time. \
-    In case you wanna be safe and secure use Option 2 (Have a look why Option 0 is [not recommended](https://sysdig.com/blog/friends-dont-let-friends-curl-bash/)). \
-    No already present file will get overwritten.
-
-  - Option 0 - Quickstart (Technically a shorter Option 1 but piping from the internet directly to bash is [not recommended](https://sysdig.com/blog/friends-dont-let-friends-curl-bash/))
-
-    ```bash
-    curl -sSL https://raw.githubusercontent.com/ichbestimmtnicht/docker-autobuild-release/master/template/initialize.sh | bash
-    ```
-
-  - Option 1 - Hooks get downloaded from this repository @ buildtime.
+  - Download the script and then run it with the default options after inspecting it
 
     ```bash
     curl -sSL https://raw.githubusercontent.com/ichbestimmtnicht/docker-autobuild-release/master/template/initialize.sh > initialize.sh
+    # Have a look at the script e.g. cat initialize.sh
     bash initialize.sh
     rm initialize.sh
     ```
 
-  - Option 2 - Using the code locally
+  - Using initialize.sh with additional options
+
+    Download the script `curl -sSL https://raw.githubusercontent.com/ichbestimmtnicht/docker-autobuild-release/master/template/initialize.sh > initialize.sh` \
+    Note: you can use multiple options at the same time \
+    Start the script with commandline options
 
     ```bash
-    curl -sSL https://raw.githubusercontent.com/ichbestimmtnicht/docker-autobuild-release/master/template/initialize.sh > initialize.sh
-    bash initialize.sh -local
-    rm initialize.sh
+    bash initialize.sh -remote # Download the scripts @buildtime
+    bash initialize.sh -tag=v0.0.1 # use a specific tag to download scripts
+    bash initialize.sh -gitlab # Gitlab CI integration
     ```
 
-- use ```bash initialize.sh -tag=master``` to always get the bleeding edge version downloaded at buildtime. Use with caution: BREAKING CHANGES MAY HAPPEN!
+  - use `bash initialize.sh -tag=master -remote` to always get the bleeding edge version downloaded at buildtime. Use with caution: BREAKING CHANGES MAY HAPPEN!
 
-- ```hooks/env.sh``` is where your variables are set. Change the file to your liking (It is well documented) \
-Please do not forget to set ssh-keys and similiar values only within your dockerhub env and only reference them like ```BUILD_ARG_SSH_KEY="${SSH_KEY}"``` within the ```hooks/env.sh``` file!
+- `hooks/env.sh` is where your variables are set. Change the file to your liking (It is documented) \
+Please do not forget to set ssh-keys and similiar values only within your dockerhub env and only reference them like `BUILD_ARG_SSH_KEY="${SSH_KEY}"` within the `hooks/env.sh` file!
 
 - Have a look at the different Dockerfile templates (within the hooks folder) and copy/paste/adapt the content of your Dockerfile into them. \
 PLANNED Or you could use a [combined Dockerfile](https://gitlab.com/ros2cuisine/templates/docker-autobuild/wiki/Combined.md)
@@ -59,7 +61,7 @@ I recommend to add a header like this in case you don't use a combined Dockerfil
     # Have a look into the hooks folder to see them per arch
     # https://github.com/ichbestimmtnicht/docker-autobuild-release/tree/master/hooks/
 
-    FROM scratch as buildcontext
+    FROM scratch AS buildcontext
 
     COPY . .
 
@@ -67,15 +69,15 @@ I recommend to add a header like this in case you don't use a combined Dockerfil
     FROM alpine
     ```
 
-- Setup [Dockerhub autobuild](https://docs.docker.com/docker-hub/builds/)
+- Setup [Dockerhub autobuild](https://docs.docker.com/docker-hub/builds/) or Tweak your CI configs
 
 - Let the images build and test them
 
 ## Known Limitations
 
-- None-amd64 images are not properly tagged -> only within the manifest
+- None-amd64 images are not properly labeled internally -> only within the manifest
 
-- No Experimental Features (like ```--platform``` to tag those none amd64 images correct from the start)
+- No Experimental Features (like `--platform` to tag those none amd64 images correct from the start)
 
 - if the build process for an arch doesn't finish the last working build will get referenced (See To do point 3)
 
@@ -85,14 +87,14 @@ I recommend to add a header like this in case you don't use a combined Dockerfil
 - adding moore arches
 - adding option to let the build fail if one of the images is not building correctly (the base tag will get updated and references to the last working image in this case)
 - enable experimental docker build features for hub.docker.com
-- CI/CD integrations: jenkins; circleci; gitlab
+- CI/CD integrations: jenkins; circleci
 - Test the ability to build windows containers
-- Combine filedownloads in ```hooks/initialize.sh``` into a single loop with the help of an array
+- Combine filedownloads in `hooks/initialize.sh` into a single loop with the help of an array
 
 ## Contribution
 
 Create an issue with your suggestions \
-Active development is in a private gitlab repository so do not open Pull Requests to this repository itself. Contact me (e.g. with an issue) to get access.
+Active development is in a private gitlab repository so do not open Pull Requests to this repository itself. Contact me (e.g. with an issue describing your improvements) to get access.
 
 ## License
 

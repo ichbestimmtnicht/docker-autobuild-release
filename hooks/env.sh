@@ -20,7 +20,12 @@
 # LABEL_ only: Use a double underscore __ for an hyphen -
 # LABEL_
 LABEL_DESCRIPTION="Testing https://github.com/ichbestimmtnicht/docker-autobuild-release"
-# You find 6 moore standard labels like maintainer and vendor within the optional section
+LABEL_DOCKER_CMD="docker pull ${IMAGE_NAME}"
+LABEL_MAINTAINER="${DEST_USER}"
+LABEL_NAME="${IMAGE_NAME}"
+LABEL_VCS_URL="https://github.com/ichbestimmtnicht/docker-autobuild-release/"
+LABEL_VENDOR="${DEST_USER}"
+LABEL_SCHEMA_VERSION="1.0.0-rc1"
 
 # BUILD_ARG_
 BUILD_ARGS=true
@@ -46,17 +51,10 @@ BUILD_QUIET=false
 BUILD_TARGET_STAGE=false
 
 # Planned sed for the next 3 from DOCKER_REPO e.g. index.docker.io/ichbestimmtnicht/docker-autobuild
-DEST_HUB="index.docker.io"
-DEST_USER="ichbestimmtnicht" 
+# DEST_HUB="index.docker.io" moved into hub.docker.com ENV VARS
+DEST_USER="ichbestimmtnicht"
 DEST_REPO="docker-autobuild"
 DEST_TAG="${DOCKER_TAG}"
-
-LABEL_DOCKER_CMD="docker pull ${IMAGE_NAME}"
-LABEL_MAINTAINER="${DEST_USER}"
-LABEL_NAME="${IMAGE_NAME}"
-LABEL_VCS_URL="https://github.com/ichbestimmtnicht/docker-autobuild-release/"
-LABEL_VENDOR="${DEST_USER}"
-LABEL_SCHEMA_VERSION="1.0.0-rc1"
 
 #--------------------------------------------------------------
 # Experimental Features

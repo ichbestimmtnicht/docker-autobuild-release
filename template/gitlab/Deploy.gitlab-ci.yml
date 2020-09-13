@@ -19,10 +19,11 @@ deploy_patch:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - echo "Placeholder"
   rules:
-    - if: $CI_DEPLOY_FREEZE == null
+  - if: $CI_DEPLOY_FREEZE == null
   only:
     refs:
       - master
+
 # Deploying latest working development
 deploy_dev:
   stage: deploy
@@ -33,4 +34,3 @@ deploy_dev:
   only:
     refs:
       - dev
-      - dev-ichbestimmtnicht
