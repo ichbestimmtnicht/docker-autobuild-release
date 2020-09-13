@@ -5,23 +5,11 @@
 # This work is licensed under the Creative Commons Attribution 4.0 International License.
 # To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/.
 
-# Install req
-# Attention: yum is not tested
-PKG_MANAGER_PATH=$( command -v yum || command -v apt-get || command -v apk ) || echo "Neither yum, apt-get nor apk found"
-PKG_MANAGER=$(basename $PKG_MANAGER_PATH)
-case $PKG_MANAGER in
-    apt-get)
-        $PKG_MANAGER update && apt install -y -q curl git
-        ;;
-    apk)
-        $PKG_MANAGER add --no-cache git curl
-        ;;
-    yum)
-        $PKG_MANAGER install -y git curl
-        ;;
-esac
+. ./hooks/vars/env.sh
+. ./hooks/tools.sh
 
-source hooks/env.sh
+SR_PACKAGES="git curl"
+install
 
 # Hardcoded Variables
 LABEL_BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
@@ -161,7 +149,7 @@ do
 
     # Loops for the buildfile
     # Get all BUILD_HOST_ variables
-    if [ ${BUILD_HOSTS} == false ]; then
+    if ${BUILD_HOSTS} == "false"; then
         echo "SCRIPT_INFO ${SR_DEST_BUILD_ARCH}: no hosts"
     else
         echo "SCRIPT_INFO: Getting all BUILD_HOST_ variables set"
@@ -173,7 +161,7 @@ do
         done
     fi
 
-    if [ ${BUILD_CGROUPS} == false ]; then
+    if ${BUILD_CGROUPS} == "false"; then
         echo "SCRIPT_INFO ${SR_DEST_BUILD_ARCH}: no cgroups"
     else
         echo "SCRIPT_INFO: Getting all BUILD_CGROUP_ variables set"
@@ -185,7 +173,7 @@ do
         done
     fi
 
-    if [ ${BUILD_ARGS} == false ]; then
+    if ${BUILD_ARGS} == "false"; then
         echo "SCRIPT_INFO ${SR_DEST_BUILD_ARCH}: no build arguments"
     else
         echo "SCRIPT_INFO: Getting all BUILD_ARG_ variables set"

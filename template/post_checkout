@@ -9,6 +9,6 @@ apt-get update && apt-get install wget bash -y -q
 
 wget https://raw.githubusercontent.com/ichbestimmtnicht/docker-autobuild-release/v0.0.1/hooks/post_checkout
 
-bash post_checkout
+sh post_checkout
 
 exit 0

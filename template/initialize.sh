@@ -119,12 +119,40 @@ else
     echo "INFO: hooks/push downloaded"
 fi
 
-# Download template files
-if test -f "hooks/env.sh"; then
-    echo "INFO: File hooks/env.sh already present -> skipping download"
+if test -f "hooks/tools.sh"; then
+    echo "INFO: File hooks/tools.sh already present -> skipping download"
 else
-    curl -sSL https://raw.githubusercontent.com/ichbestimmtnicht/docker-autobuild-release/${INITIALIZE_TAG}/template/env.sh > hooks/env.sh
-    echo "INFO: hooks/env.sh downloaded"
+    curl -sSL https://raw.githubusercontent.com/ichbestimmtnicht/docker-autobuild-release/${INITIALIZE_TAG}/hooks/tools.sh > hooks/tools.sh
+    echo "INFO: hooks/tools.sh downloaded"
+fi
+
+# Download template files
+if test -f "hooks/vars/env.sh"; then
+    echo "INFO: File hooks/vars/env.sh already present -> skipping download"
+else
+    curl -sSL https://raw.githubusercontent.com/ichbestimmtnicht/docker-autobuild-release/${INITIALIZE_TAG}/template/env.sh > hooks/vars/env.sh
+    echo "INFO: hooks/vars/env.sh downloaded"
+fi
+
+if test -f "hooks/vars/args.sh"; then
+    echo "INFO: File hooks/vars/args.sh already present -> skipping download"
+else
+    curl -sSL https://raw.githubusercontent.com/ichbestimmtnicht/docker-autobuild-release/${INITIALIZE_TAG}/template/vars/args.sh > hooks/vars/args.sh
+    echo "INFO: hooks/vars/args.sh downloaded"
+fi
+
+if test -f "hooks/vars/labels.sh"; then
+    echo "INFO: File hooks/vars/labels.sh already present -> skipping download"
+else
+    curl -sSL https://raw.githubusercontent.com/ichbestimmtnicht/docker-autobuild-release/${INITIALIZE_TAG}/template/vars/labels.sh > hooks/vars/labels.sh
+    echo "INFO: hooks/vars/labels.sh downloaded"
+fi
+
+if test -f "hooks/vars/push.sh"; then
+    echo "INFO: File hooks/vars/push.sh already present -> skipping download"
+else
+    curl -sSL https://raw.githubusercontent.com/ichbestimmtnicht/docker-autobuild-release/${INITIALIZE_TAG}/template/vars/push.sh > hooks/vars/push.sh
+    echo "INFO: hooks/vars/push.sh downloaded"
 fi
 
 if test -f "hooks/amd64.Dockerfile"; then

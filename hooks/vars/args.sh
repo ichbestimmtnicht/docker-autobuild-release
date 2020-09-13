@@ -5,8 +5,13 @@
 # This work is licensed under the Creative Commons Attribution 4.0 International License.
 # To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/.
 
-wget https://raw.githubusercontent.com/ichbestimmtnicht/docker-autobuild-release/v0.0.1/hooks/push
+# --build-arg= variables
 
-sh push
+# use any args at all?
+ARGS=true
 
-exit 0
+# Args for all arches
+SRC_REPO="alpine"
+SRC_TAG="latest"
+
+# Args for specific arches

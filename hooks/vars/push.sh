@@ -5,8 +5,10 @@
 # This work is licensed under the Creative Commons Attribution 4.0 International License.
 # To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/.
 
-wget https://raw.githubusercontent.com/ichbestimmtnicht/docker-autobuild-release/v0.0.1/hooks/push
+# different destinations to push to
 
-sh push
-
-exit 0
+# Planned sed for the next 3 from DOCKER_REPO e.g. index.docker.io/ichbestimmtnicht/docker-autobuild
+# DEST_HUB="index.docker.io" moved into hub.docker.com ENV VARS
+DEST_USER="ichbestimmtnicht"
+DEST_REPO="docker-autobuild"
+DEST_TAG="${DOCKER_TAG}"

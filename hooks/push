@@ -5,10 +5,14 @@
 # This work is licensed under the Creative Commons Attribution 4.0 International License.
 # To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/.
 
-source hooks/env.sh
+. ./hooks/vars/env.sh
+. ./hooks/tools.sh
+
+SR_PACKAGES="curl"
+install
 
 # Get the manifest-tool
-wget -cO - https://github.com/estesp/manifest-tool/releases/download/v1.0.0/manifest-tool-linux-amd64 > manifest-tool
+curl -L https://github.com/estesp/manifest-tool/releases/download/v1.0.0/manifest-tool-linux-amd64 > manifest-tool
 
 chmod +x manifest-tool
 
