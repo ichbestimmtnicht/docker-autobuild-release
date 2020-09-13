@@ -7,9 +7,6 @@
 
 # --build-arg= variables
 
-# use any args at all?
-ARGS=true
-
 # Args for all arches
 SRC_REPO="alpine"
 SRC_TAG="latest"

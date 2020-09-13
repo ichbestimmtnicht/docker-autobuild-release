@@ -9,11 +9,11 @@
 # Attention: yum is not tested
 
 install() {
-    PKG_MANAGER_PATH=$( command -v yum || command -v apt-get || command -v apk ) || echo "Neither yum, apt-get nor apk found"
+    PKG_MANAGER_PATH=$( command -v yum || command -v apt-get || command -v apk ) || ( echo "Neither yum, apt-get nor apk found"; exit1 )
     PKG_MANAGER=$(basename $PKG_MANAGER_PATH)
     case $PKG_MANAGER in
         apt-get)
-            $PKG_MANAGER update && apt install -y -q $SR_PACKAGES
+            $PKG_MANAGER update && $PKG_MANAGER install -y -q $SR_PACKAGES
             ;;
         apk)
             $PKG_MANAGER add --no-cache $SR_PACKAGES

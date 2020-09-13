@@ -14,6 +14,9 @@
 # DOCKER_TAG: the Docker repository tag being built.
 # IMAGE_NAME: the name and tag of the Docker repository being built. (This variable is a combination of DOCKER_REPO:DOCKER_TAG.)
 
+# use any build args at all?
+BUILD_ARGS=true
+
 BUILD_HOSTS=false
 # BUILD_HOST_
 

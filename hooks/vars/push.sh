@@ -9,6 +9,7 @@
 
 # Planned sed for the next 3 from DOCKER_REPO e.g. index.docker.io/ichbestimmtnicht/docker-autobuild
 # DEST_HUB="index.docker.io" moved into hub.docker.com ENV VARS
+DEST_HUB="index.docker.io"
 DEST_USER="ichbestimmtnicht"
 DEST_REPO="docker-autobuild"
 DEST_TAG="${DOCKER_TAG}"
